@@ -1,4 +1,4 @@
-# Introduction to Artificial Intelligence
+# Intro to Artificial Intelligence
 
 > "Writing is thinking. To write well is to think clearly. That's why it's so hard."
 >
