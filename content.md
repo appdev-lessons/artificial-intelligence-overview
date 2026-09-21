@@ -61,7 +61,7 @@ Notice how that discovery was made. This is more like biology than the computer 
 Two later developments are worth knowing about, and both are the same loop yet again:
 
 - **Reasoning.** Newer models are trained to write out their working before they answer, the way you might on scratch paper: try an approach, check it, back up, try another. That working is just more tokens, generated before the ones you see. It costs time and money, and it makes the models much better at math, logic, and code. When you use these models from your own programs, you'll get to choose how much reasoning effort to spend.
-- **Tools.** A model can only produce text. But the program running the model can watch for text in a special format that means "search the web for this" or "run this code", go and do it, and paste the result back into the context. The model then carries on with new information in front of it. A model working in a loop with tools like these is called an **agent**, and this is how AI products look things up, edit files, and test their own work.
+- **Tools.** A model can only produce text. But the program running the model can watch for text in a special format that means "search the web for this" or "run this code," go and do it, and paste the result back into the context. The model then carries on with new information in front of it. A model working in a loop with tools like these is called an **agent**, and this is how AI products look things up, edit files, and test their own work.
 
 You're probably asking, where do the probabilities come from? How can GPT predict which word is most likely to follow an arbitrary chunk of text?
 
@@ -77,7 +77,7 @@ There are many common definitions:
 - A prototype, design, or variant — the model of a car or phone.
 - A simplified representation of a thing — a scale model of a building.
 
-In science and statistics, a "model" is a mathematical formula that you can plug inputs into, and it transforms them into an output. The outputs are predictions that the model is making about the world: "if x happens, then y will happen".
+In science and statistics, a "model" is a mathematical formula that you can plug inputs into, and it transforms them into an output. The outputs are predictions that the model is making about the world: "if x happens, then y will happen."
 
 ### Example: Ice cream stand
 Imagine we run an ice cream stand. We want to predict how much ice cream to purchase in advance, to maximize sales but minimize waste. How can we make the best possible prediction?
@@ -140,7 +140,7 @@ One approach is to measure the "error" of each prediction vs the data:
 
 If we add up all the errors, we can come up with a measure of "fit" (or lack of fit, to be precise). Another common approach is to square the errors before adding them up. This approach gives extreme outliers more influence over fit. [Let's play around with this interactive visualization.](https://www.geogebra.org/m/XUkhCJRj) Try checking the first three checkboxes and then playing around with the sliders for `m` and `b` until you find the best possible line. Then you can see how close you got to the "ideal" line by checking the last box.
 
-This is a method called "least squares". The way I found the best fit line was:
+This is a method called "least squares." The way I found the best fit line was:
 1. Move the intercept a little; then play around with the slope until the sum of squares started going up; then reverse direction until the sum of squares slowed down and stopped.
 2. Then I'd rinse and repeat by moving the intercept, play around with the slope, and see if I could beat my previous score.
 3. I iteratively arrived at the best line by observing the rate of change of the fit as I nudged each parameter.
@@ -170,7 +170,7 @@ How about -20 degrees? The model says `6 * -20 + 60 = -60` sales. Negative ice c
 
 #### Hallucinations
 
-Predictions made outside of the range of the training data are basically useless, or worse, deceptive. In the new world of generative AI, these are referred to as "hallucinations".
+Predictions made outside of the range of the training data are basically useless, or worse, deceptive. In the new world of generative AI, these are referred to as "hallucinations."
 
 So we should keep collecting more data if we want to make predictions across a wider range of inputs.
 
@@ -205,7 +205,7 @@ $$
 
 The additional terms of the third-degree polynomial (the new architecture) gave us more flexibility to fit the data. But notice what happened to the parameters: the straight line had 2 of them, and this model has 4 (-0.001, 1, -52, and 1200). The search for the right ones got a lot harder.
 
-Linear regression is a 200 year old form of "machine learning". "Machine learning" is where we try to develop a solution by collecting data and **inferring** a pattern, rather than deducing the fundamental theory underlying the phenomenon.
+Linear regression is a 200 year old form of "machine learning." "Machine learning" is where we try to develop a solution by collecting data and **inferring** a pattern, rather than deducing the fundamental theory underlying the phenomenon.
 
 ### Deduction Example: Momentum
 
@@ -229,10 +229,10 @@ And here is the search itself. The two axes are two of the model's weights, and 
 ![A loss surface plotted over two weights, with red arrows tracing paths downhill into the blue valleys](/assets/overfitting-2.png)
 
 #### 2. The predictions of the model are only useful within the range of the data it was trained on
-Outside, it "hallucinates". More parameters give us more flexibility to fit the data. More parameters without more data can lead to **overfitting**: with enough flexibility, the model stops learning the general pattern and starts memorizing the particular examples it was trained on, wiggling through every last point. It scores beautifully on the data it has already seen and then falls apart on anything new, which is the opposite of what we wanted. More data and more parameters also increase the difficulty of iterating to minimize loss.
+Outside, it "hallucinates." More parameters give us more flexibility to fit the data. More parameters without more data can lead to **overfitting**: with enough flexibility, the model stops learning the general pattern and starts memorizing the particular examples it was trained on, wiggling through every last point. It scores beautifully on the data it has already seen and then falls apart on anything new, which is the opposite of what we wanted. More data and more parameters also increase the difficulty of iterating to minimize loss.
 
 #### 3. We don't know what the meaning of the parameters is, just that they work
-When someone "releases a model", that means releasing both the architecture and the weights.
+When someone "releases a model," that means releasing both the architecture and the weights.
 To fully open source it, you would release the method you used to get there: the training data, the loss function you chose, and so on.
 
 ### Neural Networks
