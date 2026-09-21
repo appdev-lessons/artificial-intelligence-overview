@@ -10,17 +10,21 @@ One of the objectives of this lesson is to provide future developers, managers, 
 
 For the last two decades, the kind of technology ["eating the world"](https://a16z.com/why-software-is-eating-the-world/) was internet-based, CRUD apps like Instagram and Airbnb. So we set out to learn how to build that kind of software.
 
-However, AI and machine learning (ML) are now emerging as the next wave of impactful technologies. This shift allows developers to build applications leveraging powerful AI models, such as those powering platforms like [ChatGPT](https://chatgpt.com/).
+That is still most of what this course teaches. But in the last few years, artificial intelligence and machine learning (ML) have joined it. Developers now build applications on top of powerful AI models, such as the ones behind [ChatGPT](https://chatgpt.com/) and [Claude](https://claude.ai/), and more and more new software has a model somewhere inside it.
 
 ## AI for Developers
 
 You don't need to be an ML expert to start using AI in your projects. Building your own intuition and mental model of how AI systems work can help you make your own AI-driven software. The purpose of this lesson is to give you some intuition, so that you can start applying this new technology to your own projects.
 
-A great resource to dive deeper is the [Fast.ai course](https://course.fast.ai/), which teaches practical ML and AI development.
+If you'd like to see these ideas animated before or after you read about them, [Large Language Models explained briefly](https://www.youtube.com/watch?v=LPZh9BOjkQs) by 3Blue1Brown covers much of the same ground in about eight minutes. To go a lot deeper, the [Fast.ai course](https://course.fast.ai/) teaches practical ML and AI development.
 
-## OpenAI and Accessibility
+## You Don't Have to Build the Model
 
-OpenAI has made some of the most advanced AI models available to developers through APIs. Available at [OpenAI](https://platform.openai.com/signup), these APIs let developers integrate powerful AI features into their applications. They also created their own consumer-facing product called ChatGPT. ChatGPT was supposed to mainly be an advertisement for their API, but it became one of the fastest-growing consumer applications ever launched.
+Building one of these models takes an enormous amount of data, computing power, and money, and only a handful of organizations can do it. *Using* one takes very little. Labs such as OpenAI, Anthropic, and Google make their models available to developers through APIs: your program sends some text over the internet, and the model's output comes back. You'll do exactly that later in this course.
+
+Other models are released as **open weights**, which means anyone can download the model and run it on their own hardware. We'll see what "weights" are shortly.
+
+OpenAI also created their own consumer-facing product called ChatGPT. It was supposed to mainly be an advertisement for their API, but it became one of the fastest-growing consumer applications ever launched.
 
 ## What a Model Like GPT Actually Does
 
@@ -32,25 +36,32 @@ One token is not much of a sentence. To get a sentence, you take the prompt plus
 
 And the model does not actually pick the next token. It produces a **probability for every token that could come next**, across its entire vocabulary, and then something else has to choose among those candidates.
 
-### Temperature
-
-**Temperature** is the setting that governs how that choice gets made.
-
-At a temperature of 0, the most probable token wins every time, so the same prompt returns nearly the same output on every run. As you raise the temperature, less probable candidates start getting picked, and the output varies from run to run. Push it to the maximum and the model will cheerfully wander into nonsense, because tokens it thought were unlikely are now in contention.
-
-So low temperature gives you consistency, and high temperature gives you variety. Neither is "correct"; which you want depends on whether you are writing a legal summary or brainstorming names for a band.
-
-A temperature of around 0.8 seems to give the "best" results. Why? No one knows. This is more like biology than the computer science we're used to; rather than designing all capabilities up front and then painstakingly codifying them by hand, we develop a model and then poke at it to discover its emergent properties.
+It chooses with a bit of randomness. The likely tokens usually win, but not always. That is why asking the same question twice gives you two differently worded answers: nothing is broken, a slightly different token got picked early on, and everything after it followed from there.
 
 ### Context
 
-The other thing that moves the output is how much you give the model to work with. Consider what a model would do with each of these three prompts in turn:
+The thing that moves the output most is how much you give the model to work with. Consider what a model would do with each of these three prompts in turn:
 
 - "Ruby"
 - "Ruby is a"
 - "Ruby is a programming"
 
-The further we steer the prompt down a path, the more specific and deterministic the results become. This is called providing "context". This led to the rise of "prompt engineering". Through experimentation, people realized that giving the GPT the first part of a conversation and then letting it write the next message led to good results. This, eventually, led to ChatGPT.
+The further we steer the prompt down a path, the more specific and predictable the results become. This is called providing **context**.
+
+Context matters so much because the model has only two sources of information. One is its weights (more on those below), which were fixed when its training ended, often months or years before you are talking to it. The other is the context: the text in front of it right now. It does not learn from your conversation, and when you start a new chat, it starts from nothing. Products that seem to remember you are quietly pasting notes from earlier chats into the context.
+
+Keep this in mind when you ask an AI for help with your code. It can't see your screen, your files, or your error message unless something puts them in the context. Paste in the code and the exact error, and the answers get much more specific, for the same reason that "Ruby is a programming" did.
+
+### From Autocomplete to Assistant
+
+Through experimentation, people realized that giving a GPT the first part of a conversation and then letting it write the next message led to good results. That trick became ChatGPT. The models have since been trained further on huge numbers of example conversations, so the helpful-assistant behavior is now built in. Underneath, though, it is the same loop: the whole conversation so far is the prompt, and the reply is produced one token at a time.
+
+Notice how that discovery was made. This is more like biology than the computer science we're used to; rather than designing all capabilities up front and then painstakingly codifying them by hand, we develop a model and then poke at it to discover its emergent properties.
+
+Two later developments are worth knowing about, and both are the same loop yet again:
+
+- **Reasoning.** Newer models are trained to write out their working before they answer, the way you might on scratch paper: try an approach, check it, back up, try another. That working is just more tokens, generated before the ones you see. It costs time and money, and it makes the models much better at math, logic, and code. When you use these models from your own programs, you'll get to choose how much reasoning effort to spend.
+- **Tools.** A model can only produce text. But the program running the model can watch for text in a special format that means "search the web for this" or "run this code", go and do it, and paste the result back into the context. The model then carries on with new information in front of it. A model working in a loop with tools like these is called an **agent**, and this is how AI products look things up, edit files, and test their own work.
 
 You're probably asking, where do the probabilities come from? How can GPT predict which word is most likely to follow an arbitrary chunk of text?
 
@@ -146,7 +157,16 @@ So far we've:
 - collected some data: input/output pairs.
 - generalized a model (above) into which we can plug any input to predict a corresponding output.
 
-What does our model predict our sales will be when the temperature is 0 degrees? How about -20 degrees?
+Let's use it. Plug a temperature of 0 degrees into `y = 6x + 60`.
+
+- How many sales does our model predict when the temperature is 0 degrees?
+- 60
+  - Correct! `6 * 0 + 60 = 60`.
+- any
+  - Not quite. Replace `x` with 0 in `y = 6x + 60` and work out `y`.
+{: .free_text_number #zero_degrees title="Predicting at 0 degrees" points="1" answer="1" }
+
+How about -20 degrees? The model says `6 * -20 + 60 = -60` sales. Negative ice cream. The formula will hand back an answer for any input we give it, whether or not that answer means anything.
 
 #### Hallucinations
 
@@ -220,7 +240,7 @@ To fully open source it, you would release the method you used to get there: the
 Linear regression only works well for input/output data that is numerical. More generalized machine learning techniques have been developed that work for other types of data, for example images, sound clips, and text. Two milestones are worth knowing by name:
 
 - **The Perceptron**, built by Frank Rosenblatt in 1958 and roughly modeled on a single neuron. It is the ancestor of everything below.
-- **The Transformer**, introduced in 2017, which is the architecture behind GPT. It works on text by first converting the text into numbers called **tokens**, because a model can only ever do arithmetic.
+- **The Transformer**, introduced in 2017, which is the architecture behind GPT. It works on text by first splitting the text into tokens and converting each token into numbers, because a model can only ever do arithmetic.
 
 Play with one in the browser: [A Neural Network Playground](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2,2&seed=0.16614&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=true&xSquared=true&ySquared=true&cosX=false&sinX=true&cosY=false&sinY=true&collectStats=false&problem=classification&initZero=false&hideText=false). It describes itself this way:
 
@@ -236,27 +256,29 @@ We can now answer the question we left hanging at the start: where do those prob
 
 GPT is a model in exactly the sense we've been using the word. Its input is a chunk of text converted to tokens, and its output is a probability for every token that could come next. Nobody sat down and wrote rules for which word follows which. The weights were found by iterating over an enormous amount of written text, making a prediction, measuring the loss, and nudging, billions of times over.
 
-So the differences from our ice cream line are differences of scale and architecture, not of kind. And our three takeaways survive the jump. A model asked about something far outside its training data still hallucinates, only now it does so in fluent prose. Nobody can tell you what any individual weight means. And more data still helps.
+So the differences from our ice cream line are differences of scale and architecture, not of kind. Chat, reasoning, and tools are all built on top of that one trained guess at the next token.
+
+And our three takeaways survive the jump. More data still helps. Nobody can tell you what any individual weight means. And a model asked about something far outside its training data still hallucinates, only now it does so in fluent prose. Asking about a Ruby gem released after the model's training ended is the 125 degree day: you will get a confident answer either way. That is also why tools and context matter so much. A web search, or a page of documentation pasted into the prompt, moves the question back inside the range of what the model has in front of it.
 
 ## Quiz
 
-- What is a primary benefit of OpenAI making their models accessible to developers?
-- Encourages wider adoption and innovation by regular developers.
-  - Correct! OpenAI democratized AI development by providing accessible tools.
-- Allows only tech giants to dominate the AI landscape.
-  - Not quite. OpenAI's approach reduces monopolization in AI development.
-- Ensures complete control of AI applications by OpenAI.
-  - Incorrect. OpenAI focuses on empowering developers.
-{: .choose_best #openai_access title="OpenAI Accessibility" points="1" answer="1" }
+- How does a model like GPT produce a whole paragraph of text?
+- It writes the full paragraph in one step, then checks it for errors.
+  - Not quite. There is no separate drafting or checking step. Every piece of the output is produced the same way.
+- It produces one token at a time, feeding its own output back in as part of the next input.
+  - Correct! A paragraph is that loop run a few hundred times.
+- It searches its training data for a matching paragraph and copies it.
+  - Not quite. The model does not store or look up documents. It computes a probability for each possible next token.
+{: .choose_best #token_loop title="Producing a Paragraph" points="1" answer="2" }
 
-- Which statement about temperature settings in AI models is true?
-- Lower temperatures always generate incorrect outputs.
-  - Not quite. Lower temperatures generate more deterministic responses.
-- Temperature settings have no impact on AI behavior.
-  - Incorrect. Temperature significantly influences output variability.
-- Higher temperatures create more diverse outputs.
-  - Correct! High temperatures increase randomness in the output.
-{: .choose_best #temperature_effect title="Temperature in AI Models" points="1" answer="3" }
+- You ask a chatbot the same question in two new chats and get two differently worded answers. Why?
+- The model learned from your first chat and improved its answer.
+  - Not quite. The model's weights do not change while you use it, and a new chat starts from nothing.
+- One of the two answers must be a hallucination.
+  - Not quite. Differently worded answers are normal, and both can be right.
+- The next token is chosen from the probabilities with some randomness, and each choice affects everything after it.
+  - Correct! A slightly different token early on sends the rest of the output down a different path.
+{: .choose_best #same_prompt_twice title="Same Prompt, Different Answers" points="1" answer="3" }
 
 - What does the equation `y = mx + b` represent in AI modeling?
 - The formula for predicting outcomes in a linear regression model.
