@@ -20,7 +20,7 @@ If you'd like to see these ideas animated before or after you read about them, [
 
 ## You Don't Have to Build the Model
 
-Building one of these models takes an enormous amount of data, computing power, and money, and only a handful of organizations can do it. *Using* one takes very little. Labs such as OpenAI, Anthropic, and Google make their models available to developers through APIs: your program sends some text over the internet, and the model's output comes back. You'll do exactly that later in this course.
+Building one of these models takes an enormous amount of data, computing power, and money, and only a handful of organizations can do it. *Using* one takes very little. Labs such as OpenAI, Anthropic, and Google make their models available to developers through APIs: your program sends some text over the internet, and the model's output comes back. You'll do that later in this course.
 
 Other models are released as **open weights**, which means anyone can download the model and run it on their own hardware. We'll see what "weights" are shortly.
 
@@ -28,19 +28,19 @@ OpenAI also created their own consumer-facing product called ChatGPT. It was sup
 
 ## What a Model Like GPT Actually Does
 
-Before we get into how these models are built, it's worth being precise about what one does when you use it, because it is a much narrower thing than it looks from the outside.
+Before we get into how these models are built, let's look at what one does when you use it. It does less than it appears to.
 
-You give it a chunk of text, say `The best thing about AI is its ability to`, and it produces exactly one thing: a guess at the next small piece of text. That piece is called a **token**, and what comes back is called the **output**, or the **completion**. A token is often a whole word, but not always; long or unusual words get broken into several.
+You give it a chunk of text, say `The best thing about AI is its ability to`, and it produces one thing: a guess at the next small piece of text. That piece is called a **token**, and what comes back is called the **output**, or the **completion**. A token is often a whole word, but not always; long or unusual words get broken into several.
 
-One token is not much of a sentence. To get a sentence, you take the prompt plus the token it just produced, feed the whole thing back in, and ask again. Then again. A paragraph of AI-generated prose is that loop run a few hundred times, each pass adding one more token to the end of its own output.
+One token isn't a sentence. To get a sentence, we take the prompt plus the token that the model just produced, give all of it back to the model, and ask again, and then again. To write a paragraph, that loop runs a few hundred times, and each time adds one more token to the end.
 
-And the model does not actually pick the next token. It produces a **probability for every token that could come next**, across its entire vocabulary, and then something else has to choose among those candidates.
+Also, the model doesn't pick the next token itself. It produces a **probability for every token that could come next**, across its entire vocabulary, and then the program that runs the model chooses among them.
 
-It chooses with a bit of randomness. The likely tokens usually win, but not always. That is why asking the same question twice gives you two differently worded answers: nothing is broken, a slightly different token got picked early on, and everything after it followed from there.
+It chooses with a bit of randomness: the likely tokens usually win, but not always. That is why asking the same question twice gives two differently worded answers. Nothing is broken; a slightly different token was picked early on, and the tokens after it followed from that one.
 
 ### Context
 
-The thing that moves the output most is how much you give the model to work with. Consider what a model would do with each of these three prompts in turn:
+What affects the output most is how much we give the model to work with. Consider what a model would do with each of these three prompts in turn:
 
 - "Ruby"
 - "Ruby is a"
@@ -48,7 +48,7 @@ The thing that moves the output most is how much you give the model to work with
 
 The further we steer the prompt down a path, the more specific and predictable the results become. This is called providing **context**.
 
-Context matters so much because the model has only two sources of information. One is its weights (more on those below), which were fixed when its training ended, often months or years before you are talking to it. The other is the context: the text in front of it right now. It does not learn from your conversation, and when you start a new chat, it starts from nothing. Products that seem to remember you are quietly pasting notes from earlier chats into the context.
+Context matters so much because the model has only two sources of information. One is its weights (more on those below), which were fixed when its training ended, often months or years before you are talking to it. The other is the context: the text in front of it right now. It does not learn from your conversation, and when you start a new chat, it starts from nothing. Products that seem to remember you are adding notes from earlier chats to the context.
 
 Keep this in mind when you ask an AI for help with your code. It can't see your screen, your files, or your error message unless something puts them in the context. Paste in the code and the exact error, and the answers get much more specific, for the same reason that "Ruby is a programming" did.
 
@@ -58,10 +58,10 @@ Through experimentation, people realized that giving a GPT the first part of a c
 
 Notice how that discovery was made. This is more like biology than the computer science we're used to; rather than designing all capabilities up front and then painstakingly codifying them by hand, we develop a model and then poke at it to discover its emergent properties.
 
-Two later developments are worth knowing about, and both are the same loop yet again:
+Two later developments use the same loop:
 
-- **Reasoning.** Newer models are trained to write out their working before they answer, the way you might on scratch paper: try an approach, check it, back up, try another. That working is just more tokens, generated before the ones you see. It costs time and money, and it makes the models much better at math, logic, and code. When you use these models from your own programs, you'll get to choose how much reasoning effort to spend.
-- **Tools.** A model can only produce text. But the program running the model can watch for text in a special format that means "search the web for this" or "run this code," go and do it, and paste the result back into the context. The model then carries on with new information in front of it. A model working in a loop with tools like these is called an **agent**, and this is how AI products look things up, edit files, and test their own work.
+- **Reasoning.** Newer models are trained to write out their working before they answer, the way you might on scratch paper: try an approach, check it, back up, try another. That working is more tokens, generated before the ones you see. It costs time and money, and it makes the models much better at math, logic, and code. When you use these models from your own programs, you'll get to choose how much reasoning effort to spend.
+- **Tools.** A model can only produce text. But the program running the model can watch for text in a special format that means "search the web for this" or "run this code," do it, and add the result to the context. The model then continues with that new information. A model working in a loop with tools like these is called an **agent**, and this is how AI products look things up, edit files, and test their own work.
 
 You're probably asking, where do the probabilities come from? How can GPT predict which word is most likely to follow an arbitrary chunk of text?
 
@@ -126,7 +126,7 @@ Is described by:
 
 Where y is ice cream sales and x is degrees Fahrenheit. This formula is a *model* of the ice cream/temperature phenomenon. Once I've determined the m and b that describe the line I drew through my data, I can plug in any temperature for x and predict how many ice cream sales.
 
-`m` (7 in this case) and `b` (-140 in this case) are the **parameters** of this model, so this model has 2 of them. They are also called the model's **weights**, and we'll use the two words interchangeably from here on. Notice that `x` is not a parameter: `x` is the input we plug in, and it changes every time we make a prediction. The parameters are the numbers we had to go *find*, and once found they stay put.
+`m` (7 in this case) and `b` (-140 in this case) are the **parameters** of this model, so this model has 2 of them. They are also called the model's **weights**, and we'll use the two words interchangeably from here on. Notice that `x` is not a parameter: `x` is the input we plug in, and it changes every time we make a prediction. The parameters are the numbers that we had to *find*, and once we've found them, they don't change.
 
 But, someone else might eyeball the line differently:
 
@@ -166,7 +166,7 @@ Let's use it. Plug a temperature of 0 degrees into `y = 6x + 60`.
   - Not quite. Replace `x` with 0 in `y = 6x + 60` and work out `y`.
 {: .free_text_number #zero_degrees title="Predicting at 0 degrees" points="1" answer="1" }
 
-How about -20 degrees? The model says `6 * -20 + 60 = -60` sales. Negative ice cream. The formula will hand back an answer for any input we give it, whether or not that answer means anything.
+How about -20 degrees? The model says `6 * -20 + 60 = -60` sales, which is impossible. The formula gives us an answer for any input, whether or not the answer means anything.
 
 #### Hallucinations
 
@@ -211,25 +211,25 @@ Linear regression is a 200 year old form of "machine learning." "Machine learnin
 
 `p = mv`
 
-`p` is momentum, `m` is mass, and `v` is velocity. If we know the mass and velocity of an object, this model allows us to predict its momentum (by multiplying them together). This is the definition of momentum in Newtonian mechanics, and nobody arrived at it by collecting a pile of measurements and fitting a line to them. Newton developed a theory of how the underlying mechanism worked and *deduced* the formula from it. By contrast, our formula for the temperature/ice cream relationship was *inferred*: we never worked out why warm weather sells ice cream, we just noticed in the data that it does.
+`p` is momentum, `m` is mass, and `v` is velocity. If we know the mass and velocity of an object, this model allows us to predict its momentum (by multiplying them together). This is the definition of momentum in Newtonian mechanics, and it wasn't found by collecting measurements and fitting a line to them. Newton developed a theory of how the underlying mechanism worked and *deduced* the formula from it. By contrast, our formula for the temperature/ice cream relationship was *inferred*: we never worked out why warm weather sells ice cream; we only noticed in the data that it does.
 
-That is the dividing line. Deduction gives you a formula you can explain. Inference gives you a formula that works, and machine learning is what we call it when we settle for the second kind.
+That's the difference between the two. Deduction gives us a formula that we can explain. Inference gives us a formula that works, even if we can't explain it, and machine learning is the second kind.
 
 ### Takeaways from this exercise
 
 #### 1. More data improves the model
 We improve the fit of the model through trial and error: by measuring loss, adjusting weights, measuring again, and so on, until we get close to a minimum. The more times we iterate, the closer we get to the "true" minimum.
 
-Here is what more data buys you. Each column below trains the same kind of model on ten times more examples than the column to its left. The orange curve is the loss, dropping as the training set grows, and the blue line underneath is the shape the model has learned. With 10,000 examples it has barely found a straight line; with 10,000,000 it has recovered the actual pattern hiding in the data (the dotted shape).
+Here is what more data does. Each column below trains the same kind of model on ten times more examples than the column to its left. The orange curve is the loss, dropping as the training set grows, and the blue line underneath is the shape the model has learned. With 10,000 examples it has barely found a straight line; with 10,000,000 it has found the actual pattern in the data (the dotted shape).
 
 ![Four columns showing loss falling and the learned shape sharpening as the training set grows from ten thousand to ten million examples](/assets/overfitting-1.png)
 
-And here is the search itself. The two axes are two of the model's weights, and the colors are the loss for each combination of them: blue valleys are a good fit, red peaks are a bad one. The red arrows are the path taken while nudging the weights downhill, which is exactly what we were doing by hand with the sliders. With 2 weights we can draw this picture. Real models have billions, and nobody can draw that.
+And here is the search itself. The two axes are two of the model's weights, and the colors are the loss for each combination of them: blue valleys are a good fit, red peaks are a bad one. The red arrows are the path taken while nudging the weights downhill, which is what we were doing by hand with the sliders. We can draw this picture because there are only 2 weights. Real models have billions of them, which can't be drawn.
 
 ![A loss surface plotted over two weights, with red arrows tracing paths downhill into the blue valleys](/assets/overfitting-2.png)
 
 #### 2. The predictions of the model are only useful within the range of the data it was trained on
-Outside, it "hallucinates." More parameters give us more flexibility to fit the data. More parameters without more data can lead to **overfitting**: with enough flexibility, the model stops learning the general pattern and starts memorizing the particular examples it was trained on, wiggling through every last point. It scores beautifully on the data it has already seen and then falls apart on anything new, which is the opposite of what we wanted. More data and more parameters also increase the difficulty of iterating to minimize loss.
+Outside, it "hallucinates." More parameters give us more flexibility to fit the data. More parameters without more data can lead to **overfitting**: with enough flexibility, the model stops learning the general pattern and starts memorizing the particular examples it was trained on, passing through every point. It scores very well on the data that it has already seen and badly on anything new, which is the opposite of what we wanted. More data and more parameters also increase the difficulty of iterating to minimize loss.
 
 #### 3. We don't know what the meaning of the parameters is, just that they work
 When someone "releases a model," that means releasing both the architecture and the weights.
@@ -240,7 +240,7 @@ To fully open source it, you would release the method you used to get there: the
 Linear regression only works well for input/output data that is numerical. More generalized machine learning techniques have been developed that work for other types of data, for example images, sound clips, and text. Two milestones are worth knowing by name:
 
 - **The Perceptron**, built by Frank Rosenblatt in 1958 and roughly modeled on a single neuron. It is the ancestor of everything below.
-- **The Transformer**, introduced in 2017, which is the architecture behind GPT. It works on text by first splitting the text into tokens and converting each token into numbers, because a model can only ever do arithmetic.
+- **The Transformer**, introduced in 2017, which is the architecture behind GPT. It works on text by first splitting the text into tokens and converting each token into numbers, because a model can only do arithmetic.
 
 Play with one in the browser: [A Neural Network Playground](https://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=spiral&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,2,2&seed=0.16614&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=true&xSquared=true&ySquared=true&cosX=false&sinX=true&cosY=false&sinY=true&collectStats=false&problem=classification&initZero=false&hideText=false). It describes itself this way:
 
@@ -254,11 +254,11 @@ Play with one in the browser: [A Neural Network Playground](https://playground.t
 
 We can now answer the question we left hanging at the start: where do those probabilities come from?
 
-GPT is a model in exactly the sense we've been using the word. Its input is a chunk of text converted to tokens, and its output is a probability for every token that could come next. Nobody sat down and wrote rules for which word follows which. The weights were found by iterating over an enormous amount of written text, making a prediction, measuring the loss, and nudging, billions of times over.
+GPT is a model in the same sense that we've been using the word. Its input is a chunk of text converted to tokens, and its output is a probability for every token that could come next. Nobody wrote rules for which word follows which. The weights were found by iterating over an enormous amount of written text, making a prediction, measuring the loss, and nudging, billions of times over.
 
 So the differences from our ice cream line are differences of scale and architecture, not of kind. Chat, reasoning, and tools are all built on top of that one trained guess at the next token.
 
-And our three takeaways survive the jump. More data still helps. Nobody can tell you what any individual weight means. And a model asked about something far outside its training data still hallucinates, only now it does so in fluent prose. Asking about a Ruby gem released after the model's training ended is the 125 degree day: you will get a confident answer either way. That is also why tools and context matter so much. A web search, or a page of documentation pasted into the prompt, moves the question back inside the range of what the model has in front of it.
+And our three takeaways still apply. More data still helps. Nobody can tell you what any individual weight means. And a model asked about something far outside its training data still hallucinates, only now it does so in fluent prose. Asking about a Ruby gem that was released after the model's training ended is like asking our line about a 125 degree day: we'll get a confident answer either way. That is also why tools and context matter so much. A web search, or a page of documentation pasted into the prompt, moves the question back inside the range of what the model has in front of it.
 
 ## Quiz
 
@@ -309,7 +309,7 @@ And our three takeaways survive the jump. More data still helps. Nobody can tell
 
 ## Conclusion
 
-Artificial intelligence represents a transformative leap in how software interacts with and learns from the world. This lesson introduced the foundational concepts: what a model is, how one is found rather than designed, and what that process explains about the way tools like GPT behave. With a basic intuition of how AI models work, you are equipped to experiment, innovate, and integrate these powerful technologies into your projects.
+This lesson introduced the foundational concepts: what a model is, how one is found rather than designed, and what that explains about the way tools like GPT behave. With that intuition, you're ready to start using AI models in your own projects.
 
 ---
 
