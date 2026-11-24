@@ -264,47 +264,47 @@ And our three takeaways survive the jump. More data still helps. Nobody can tell
 
 - How does a model like GPT produce a whole paragraph of text?
 - It writes the full paragraph in one step, then checks it for errors.
-  - Not quite. There is no separate drafting or checking step. Every piece of the output is produced the same way.
+  - There is no separate drafting or checking step. Every piece of the output is produced the same way.
 - It produces one token at a time, feeding its own output back in as part of the next input.
-  - Correct! A paragraph is that loop run a few hundred times.
+  - Yes! A paragraph is that loop run a few hundred times, and each pass adds one more token to the end.
 - It searches its training data for a matching paragraph and copies it.
   - Not quite. The model does not store or look up documents. It computes a probability for each possible next token.
 {: .choose_best #token_loop title="Producing a Paragraph" points="1" answer="2" }
 
 - You ask a chatbot the same question in two new chats and get two differently worded answers. Why?
 - The model learned from your first chat and improved its answer.
-  - Not quite. The model's weights do not change while you use it, and a new chat starts from nothing.
+  - The model's weights do not change while you use it, and a new chat starts from nothing.
 - One of the two answers must be a hallucination.
   - Not quite. Differently worded answers are normal, and both can be right.
 - The next token is chosen from the probabilities with some randomness, and each choice affects everything after it.
-  - Correct! A slightly different token early on sends the rest of the output down a different path.
+  - Exactly. A slightly different token gets picked early on, and everything after it follows from there.
 {: .choose_best #same_prompt_twice title="Same Prompt, Different Answers" points="1" answer="3" }
 
 - What does the equation `y = mx + b` represent in AI modeling?
 - The formula for predicting outcomes in a linear regression model.
-  - Correct! This equation describes the relationship between inputs and outputs in linear regression.
+  - That's right! `m` is the slope of the line and `b` is the intercept, and those two numbers are the model's parameters.
 - A general formula for all types of machine learning models.
-  - Not quite. This equation is specific to linear regression.
+  - Not quite. This equation describes a straight line. The parabola and the polynomial that we tried later have different formulas.
 - The training process for a neural network.
-  - Incorrect. Neural networks use a different process.
+  - This equation is a model, not a way of training one. Training is the loop of predicting, measuring the loss, and nudging the weights.
 {: .choose_best #linear_regression title="Linear Regression Equation" points="1" answer="1" }
 
 - Why is it important to limit predictions to the range of training data?
 - Models always perform better with extreme data values.
-  - Not quite. Extreme values can lead to poor or incorrect predictions.
+  - Not quite. Our line predicted negative ice cream sales at -20 degrees, which is outside the range of the data that the line was fit to.
 - Predictions outside the training range may be inaccurate or misleading.
-  - Correct! This limitation is due to a lack of data to guide the model.
+  - Yes! The model was fit to the data inside that range, and there's no data to guide its predictions outside it.
 - To reduce computation time during prediction.
-  - Incorrect. Limiting the range isn't related to computation time.
+  - Computation time isn't the issue. The formula returns an answer for any input, whether or not that answer means anything.
 {: .choose_best #training_range title="Limits of Training Data Range" points="1" answer="2" }
 
 - What happens when a model is overfitted?
 - It performs consistently well on all datasets.
-  - Not quite. Overfitting impacts performance on unseen data.
+  - Not quite. An overfitted model scores well on the data it has already seen, and poorly on anything new.
 - It becomes more accurate for predictions outside its training range.
-  - Incorrect. Overfitting does not improve performance on new or extreme inputs.
+  - That's the opposite of what happens. Overfitting makes a model worse on new inputs, not better.
 - It memorizes training data but struggles with new data.
-  - Correct! Overfitting reduces the model's ability to generalize.
+  - Right! With enough flexibility, a model memorizes its training examples and stops learning the general pattern.
 {: .choose_best #overfitting title="Understanding Overfitting" points="1" answer="3" }
 
 ## Conclusion
