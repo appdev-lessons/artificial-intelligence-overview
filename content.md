@@ -161,7 +161,7 @@ Let's use it. Plug a temperature of 0 degrees into `y = 6x + 60`.
 
 - How many sales does our model predict when the temperature is 0 degrees?
 - 60
-  - Correct! `6 * 0 + 60 = 60`.
+  - Yes! `6 * 0 + 60 = 60`, so the model predicts 60 sales at 0 degrees.
 - any
   - Not quite. Replace `x` with 0 in `y = 6x + 60` and work out `y`.
 {: .free_text_number #zero_degrees title="Predicting at 0 degrees" points="1" answer="1" }
