@@ -20,7 +20,7 @@ If you'd like to see these ideas animated before or after you read about them, [
 
 ## You Don't Have to Build the Model
 
-Building one of these models takes an enormous amount of data, computing power, and money, and only a handful of organizations can do it. *Using* one takes very little. Labs such as OpenAI, Anthropic, and Google make their models available to developers through APIs: your program sends some text over the internet, and the model's output comes back. You'll do that later in this course.
+Building one of these models takes an enormous amount of data, computing power, and money, and only a handful of organizations can do it. *Using* one takes very little. Labs such as OpenAI, Anthropic, and Google make their models available to developers through APIs: your program sends some text over the internet and receives the model's output. You'll do that later in this course.
 
 Other models are released as **open weights**, which means anyone can download the model and run it on their own hardware. We'll see what "weights" are shortly.
 
@@ -28,7 +28,7 @@ OpenAI also created their own consumer-facing product called ChatGPT. It was sup
 
 ## What a Model Like GPT Actually Does
 
-Before we get into how these models are built, let's look at what one does when you use it. It does less than it appears to.
+Before we get into how these models are built, let's look at what one does when you use it.
 
 You give it a chunk of text, say `The best thing about AI is its ability to`, and it produces one thing: a guess at the next small piece of text. That piece is called a **token**, and what comes back is called the **output**, or the **completion**. A token is often a whole word, but not always; long or unusual words get broken into several.
 
@@ -54,7 +54,7 @@ Keep this in mind when you ask an AI for help with your code. It can't see your 
 
 ### From Autocomplete to Assistant
 
-Through experimentation, people realized that giving a GPT the first part of a conversation and then letting it write the next message led to good results. That trick became ChatGPT. The models have since been trained further on huge numbers of example conversations, so the helpful-assistant behavior is now built in. Underneath, though, it is the same loop: the whole conversation so far is the prompt, and the reply is produced one token at a time.
+Through experimentation, people realized that giving a GPT the first part of a conversation and then letting it write the next message led to good results. ChatGPT was built on that technique. The models have since been trained further on huge numbers of example conversations, so the helpful-assistant behavior is now built in. It still works by the same loop, though: the whole conversation so far is the prompt, and the reply is produced one token at a time.
 
 Notice how that discovery was made. This is more like biology than the computer science we're used to; rather than designing all capabilities up front and then painstakingly codifying them by hand, we develop a model and then poke at it to discover its emergent properties.
 
@@ -213,7 +213,7 @@ Linear regression is a 200 year old form of "machine learning." "Machine learnin
 
 `p` is momentum, `m` is mass, and `v` is velocity. If we know the mass and velocity of an object, this model allows us to predict its momentum (by multiplying them together). This is the definition of momentum in Newtonian mechanics, and it wasn't found by collecting measurements and fitting a line to them. Newton developed a theory of how the underlying mechanism worked and *deduced* the formula from it. By contrast, our formula for the temperature/ice cream relationship was *inferred*: we never worked out why warm weather sells ice cream; we only noticed in the data that it does.
 
-That's the difference between the two. Deduction gives us a formula that we can explain. Inference gives us a formula that works, even if we can't explain it, and machine learning is the second kind.
+Deduction gives us a formula that we can explain. Inference gives us a formula that works, even if we can't explain it, and machine learning is the second kind.
 
 ### Takeaways from this exercise
 
@@ -237,7 +237,7 @@ To fully open source it, you would release the method you used to get there: the
 
 ### Neural Networks
 
-Linear regression only works well for input/output data that is numerical. More generalized machine learning techniques have been developed that work for other types of data, for example images, sound clips, and text. Two milestones are worth knowing by name:
+Linear regression only works well for input/output data that is numerical. More generalized machine learning techniques have been developed that work for other types of data, for example images, sound clips, and text. Here are two milestones to know by name:
 
 - **The Perceptron**, built by Frank Rosenblatt in 1958 and roughly modeled on a single neuron. It is the ancestor of everything below.
 - **The Transformer**, introduced in 2017, which is the architecture behind GPT. It works on text by first splitting the text into tokens and converting each token into numbers, because a model can only do arithmetic.
